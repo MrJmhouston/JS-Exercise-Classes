@@ -83,23 +83,23 @@ class Car {
   fill(gallons) {
     this.tank += gallons;
   }
-  drive() {
-    let milesPerGallon = 20;
-    let qty = 1;
-    setInterval(function () {
-      this.odometer.accumulate = qty++;
-      if (this.odometer === 300) {
-        return "I ran out of fuel at ${this.odometer} miles!";
-      }
-    }, 300);
-    setInterval(function () {
-      this.tank.accumulate = qty-- / milesPerGallon;
-      if (this.tank === 0) {
-        return "You are out of gas!";
-      }
-    });
-  }
+  drive(distance) {
+    const maxDistance = this.tank * this.milesPerGallon
+    if(maxDistance > distance) {
+      this.odometer = this.odometer + distance
+      this.tank = this.tank - (distance / this.milesPerGallon)
+    } else {
+      this.tank = 0;
+      this.odometer = this.odometer + maxDistance
+      return `I ran out of fuel at ${this.odometer} miles!`;
+    }      
+  } 
 }
+
+const jeep = new Car({
+  model: 'Jeep',
+  milesPerGallon: 30
+});
 
 
 /*
@@ -145,22 +145,20 @@ class Lambdasian {
 
 class Instructor extends Lambdasian {
   constructor(attributes) {
-    super(attributes.name);
-    super(attributes.age);
-    super(attributes.location);
+    super(attributes);
     this.specialty = attributes.specialty;
     this.favLanguage = attributes.favLanguage;
     this.catchPhrase = attributes.catchPhrase;
   }
   demo(subject) {
-    return "Today we are learning about ${subject}";
+    return `Today we are learning about ${subject}`;
   }
   grade(student, subject) {
-    return "${student.name} receives a perfect score on ${subject}";
+    return `${student.name} receives a perfect score on ${subject}`;
   }
 }
 
-
+console.log(Instructor.name);
 
 /*
   TASK 5
@@ -181,15 +179,13 @@ class Instructor extends Lambdasian {
 
 class Student extends Lambdasian {
   constructor(attributes) {
-    super(attributes.name);
-    super(attributes.age);
-    super(attributes.location);
+    super(attributes);
     this.previousBackground = attributes.previousBackground;
     this.className = attributes.className;
     this.favSubjects = attributes.favSubjects;
   }
   listSubjects() {
-    return "${this.favSubjects}";
+    return `${this.favSubjects}`;
   }
   PRAssignment(subject) {
     return `${this.name} has submitted a PR for ${subject}`;
@@ -218,23 +214,18 @@ class Student extends Lambdasian {
 
 class ProjectManager extends Instructor {
   constructor(attributes) {
-    super(attributes.name);
-    super(attributes.age);
-    super(attributes.location);
-    super(attributes.specialty);
-    super(attributes.favLanguage);
-    super(attributes.catchPhrase);
+    super(attributes);
     this.gradClassName = attributes.gradClassName;
     this.favInstructor = attributes.favInstructor;
   }
   standUp(channel) {
-    return `${name} announces to ${channel}, @channel standy times!`;
+    return `${this.name} announces to ${channel}, @channel standy times!`;
   }
   debugsCode(student, subject) {
-    return `${name} debugs ${student.name}'s code on ${subject}`;
+    return `${this.name} debugs ${student.name}'s code on ${subject}`;
   }
 }
-
+console.log(ProjectManager.name);
 
 /*
   STRETCH PROBLEM (no tests!)
